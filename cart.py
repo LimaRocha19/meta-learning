@@ -169,4 +169,21 @@ kidney_path = './csv/kidney.csv'
 kidney_target = 'class'
 kidney_acc = cart(kidney_path, kidney_target)
 
-# database traffic - WILL BE ANALYZED BETTER SOON
+# database traffic
+
+traffic_path = './csv/traffic.csv'
+traffic_target = 'Slowness in traffic (%)'
+traffic_acc = cart(traffic_path, traffic_target)
+
+# creating a dataframe containing the accuracy from each db processed with CART
+
+table = {
+    'db': [abalone_path, adult_path, australian_path, drugs_path, fertility_path, german_path, glass_path, heart_path, ionosphere_path, pendigits_path, phishing_path, failures_path, shuttle_path, spam_path, wdbc_path, wifi_path, wine_path, zoo_path, breast_path, stability_path, student_path, leaf_path, kidney_path, traffic_path],
+    'accuracy': [abalone_acc, adult_acc, australian_acc, drugs_acc, fertility_acc, german_acc, glass_acc, heart_acc, ionosphere_acc, pendigits_acc, phishing_acc, failures_acc, shuttle_acc, spam_acc, wdbc_acc, wifi_acc, wine_acc, zoo_acc, breast_acc, stability_acc, student_acc, leaf_acc, kidney_acc, traffic_acc]
+}
+
+columns = ['db', 'accuracy']
+
+df = pd.DataFrame(table, columns=columns)
+
+df.to_csv('./results/cart.csv')

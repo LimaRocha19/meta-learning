@@ -259,4 +259,6 @@ kidney.to_csv('./csv/kidney.csv')
 
 traffic = pd.read_excel('Bases_Consolidadas.xlsx', sheet_name='TRAFFIC')
 
+traffic['Slowness in traffic (%)'] = pd.factorize(traffic['Slowness in traffic (%)'])[0]
+
 traffic.to_csv('./csv/traffic.csv')
