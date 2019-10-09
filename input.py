@@ -13,7 +13,7 @@ abalone = pd.read_excel('Bases_Consolidadas.xlsx', sheet_name='ABALONE')
 
 abalone['Sex'] = pd.factorize(abalone['Sex'])[0]
 
-abalone.to_csv('abalone.csv')
+abalone.to_csv('./csv/abalone.csv')
 
 # database adult - needs to replace missing value and transform values
 
@@ -34,13 +34,13 @@ adult['native-country'] = pd.factorize(adult['native-country'])[0]
 adult['workclass'] = pd.factorize(adult['workclass'])[0]
 adult['income'] = pd.factorize(adult['income'])[0]
 
-adult.to_csv('adult.csv')
+adult.to_csv('./csv/adult.csv')
 
 # database australian - needs to transform values
 
 australian = pd.read_excel('Bases_Consolidadas.xlsx', sheet_name='AUSTRALIAN')
 
-australian.to_csv('australian.csv')
+australian.to_csv('./csv/australian.csv')
 
 # database drugs - needs to transform values
 
@@ -66,7 +66,7 @@ drugs['Nicotine'] = pd.factorize(drugs['Nicotine'])[0]
 drugs['Semer'] = pd.factorize(drugs['Semer'])[0]
 drugs['VSA'] = pd.factorize(drugs['VSA'])[0]
 
-drugs.to_csv('drugs.csv')
+drugs.to_csv('./csv/drugs.csv')
 
 # database fertility - needs to transform values
 
@@ -74,25 +74,25 @@ fertility = pd.read_excel('Bases_Consolidadas.xlsx', sheet_name='FERTILITY')
 
 fertility['Output'] = pd.factorize(fertility['Output'])[0]
 
-fertility.to_csv('fertility.csv')
+fertility.to_csv('./csv/fertility.csv')
 
 # database german - needs nothing (maybe little transformation)
 
 german = pd.read_excel('Bases_Consolidadas.xlsx', sheet_name='GERMAN')
 
-german.to_csv('german.csv')
+german.to_csv('./csv/german.csv')
 
 # database glass - needs nothing (maybe little transformation)
 
 glass = pd.read_excel('Bases_Consolidadas.xlsx', sheet_name='GLASS')
 
-glass.to_csv('glass.csv')
+glass.to_csv('./csv/glass.csv')
 
 # database heart - needs nothing (maybe little transformation)
 
 heart = pd.read_excel('Bases_Consolidadas.xlsx', sheet_name='HEART')
 
-heart.to_csv('heart.csv')
+heart.to_csv('./csv/heart.csv')
 
 # database ionosphere - needs to transform values
 
@@ -100,37 +100,37 @@ ionosphere = pd.read_excel('Bases_Consolidadas.xlsx', sheet_name='IONOSPHERE')
 
 ionosphere['A35'] = pd.factorize(ionosphere['A35'])[0]
 
-ionosphere.to_csv('ionosphere.csv')
+ionosphere.to_csv('./csv/ionosphere.csv')
 
 # database pendigits - needs nothing (maybe little transformation)
 
 pendigits = pd.read_excel('Bases_Consolidadas.xlsx', sheet_name='PENDIGITS')
 
-pendigits.to_csv('pendigits.csv')
+pendigits.to_csv('./csv/pendigits.csv')
 
 # database phishing - needs nothing (maybe little transformation)
 
 phishing = pd.read_excel('Bases_Consolidadas.xlsx', sheet_name='PHISHING')
 
-phishing.to_csv('phishing.csv')
+phishing.to_csv('./csv/phishing.csv')
 
 # database failures - needs nothing (maybe little transformation)
 
 failures = pd.read_excel('Bases_Consolidadas.xlsx', sheet_name='FAILURES')
 
-failures.to_csv('failures.csv')
+failures.to_csv('./csv/failures.csv')
 
 # database shuttle - needs nothing (maybe little transformation)
 
 shuttle = pd.read_excel('Bases_Consolidadas.xlsx', sheet_name='SHUTTLE')
 
-shuttle.to_csv('shuttle.csv')
+shuttle.to_csv('./csv/shuttle.csv')
 
 # database spam - needs nothing (maybe little transformation)
 
 spam = pd.read_excel('Bases_Consolidadas.xlsx', sheet_name='SPAM')
 
-spam.to_csv('spam.csv')
+spam.to_csv('./csv/spam.csv')
 
 # database wdbc - needs to transform values
 
@@ -138,19 +138,19 @@ wdbc = pd.read_excel('Bases_Consolidadas.xlsx', sheet_name='WDBC')
 
 wdbc['Cancer'] = pd.factorize(wdbc['Cancer'])[0]
 
-wdbc.to_csv('wdbc.csv')
+wdbc.to_csv('./csv/wdbc.csv')
 
 # database wifi - needs nothing (maybe little transformation)
 
 wifi = pd.read_excel('Bases_Consolidadas.xlsx', sheet_name='WIFI')
 
-wifi.to_csv('wifi.csv')
+wifi.to_csv('./csv/wifi.csv')
 
 # database wine - needs nothing (maybe little transformation)
 
 wine = pd.read_excel('Bases_Consolidadas.xlsx', sheet_name='WINE')
 
-wine.to_csv('wine.csv')
+wine.to_csv('./csv/wine.csv')
 
 # database zoo - needs to transform values
 
@@ -158,7 +158,7 @@ zoo = pd.read_excel('Bases_Consolidadas.xlsx', sheet_name='ZOO')
 
 zoo['Name'] = pd.factorize(zoo['Name'])[0]
 
-zoo.to_csv('zoo.csv')
+zoo.to_csv('./csv/zoo.csv')
 
 # database breast - needs to transform values
 
@@ -166,7 +166,7 @@ breast = pd.read_excel('Bases_Consolidadas.xlsx', sheet_name='BREAST')
 
 breast['Class'] = pd.factorize(breast['Class'])[0]
 
-breast.to_csv('breast.csv')
+breast.to_csv('./csv/breast.csv')
 
 # database stability - needs to transform values
 
@@ -174,13 +174,13 @@ stability = pd.read_excel('Bases_Consolidadas.xlsx', sheet_name='STABILITY')
 
 stability['stabf'] = pd.factorize(stability['stabf'])[0]
 
-stability.to_csv('stability.csv')
+stability.to_csv('./csv/stability.csv')
 
 # database trip - needs nothing (maybe little transformation)
 
 trip = pd.read_excel('Bases_Consolidadas.xlsx', sheet_name='TRIP')
 
-trip.to_csv('trip.csv')
+trip.to_csv('./csv/trip.csv')
 
 # database student - needs to transform values
 
@@ -204,13 +204,13 @@ student['higher'] = pd.factorize(student['higher'])[0]
 student['internet'] = pd.factorize(student['internet'])[0]
 student['romantic'] = pd.factorize(student['romantic'])[0]
 
-student.to_csv('student.csv')
+student.to_csv('./csv/student.csv')
 
 # database leaf - needs nothing (maybe little transformation)
 
 leaf = pd.read_excel('Bases_Consolidadas.xlsx', sheet_name='LEAF')
 
-leaf.to_csv('leaf.csv')
+leaf.to_csv('./csv/leaf.csv')
 
 # database kidney - needs to replace missing value and transform values
 
@@ -253,10 +253,10 @@ kidney['pe'] = pd.factorize(kidney['pe'])[0]
 kidney['ane'] = pd.factorize(kidney['ane'])[0]
 kidney['class'] = pd.factorize(kidney['class'])[0]
 
-kidney.to_csv('kidney.csv')
+kidney.to_csv('./csv/kidney.csv')
 
 # database traffic - needs nothing (maybe little transformation)
 
 traffic = pd.read_excel('Bases_Consolidadas.xlsx', sheet_name='TRAFFIC')
 
-traffic.to_csv('traffic.csv')
+traffic.to_csv('./csv/traffic.csv')
