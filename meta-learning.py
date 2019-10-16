@@ -6,43 +6,6 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
 
-def meta_features(csv_path, target):
-
-    df = pd.read_csv(csv_path)
-    del df['Unnamed: 0'] # a small workaround regarding csv exporting issues
-
-    # simple characteristics
-
-    # number of classes
-    classes = df[target].drop_duplicates().count()
-
-    # number of examples
-    examples = df.count()[target]
-
-    # number of features
-    features = len(df.columns)
-
-    # number of binary attributes
-
-    # statistical characteristics
-
-    # mean degree of correlation
-    pearson = df.corr()[target]
-    del pearson[target]
-    mean_pearson = pearson.mean()
-
-    # standard deviation
-    std = df[target].std()
-
-    # canonical correlation
-    canonical = pearson.max()
-
-    # skewness
-    skewness = df[target].skew()
-
-    # kurtosis
-    kurtosis = df[target].kurtosis()
-
 
 cart = pd.read_csv('./results/cart.csv')
 del cart['Unnamed: 0'] # a small workaround regarding csv exporting issues
