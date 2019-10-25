@@ -173,6 +173,9 @@ metadata(failures, './metadata/failures.csv')
 
 shuttle = pd.read_excel('Bases_Consolidadas.xlsx', sheet_name='SHUTTLE')
 
+for column in shuttle.columns:
+    shuttle[column] = pd.factorize(shuttle[column])[0]
+
 shuttle.to_csv('./csv/shuttle.csv')
 metadata(shuttle, './metadata/shuttle.csv')
 
