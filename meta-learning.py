@@ -19,14 +19,42 @@ neural = pd.read_csv('./results/neural.csv')
 del neural['Unnamed: 0'] # a small workaround regarding csv exporting issues
 neural_accuracy = neural['accuracy']
 
+db = ['abalone', 'adult', 'australian', 'drugs', 'fertility', 'german', 'glass', 'heart', 'ionosphere', 'pendigits', 'phishing', 'failures', 'shuttle', 'spam', 'wdbc', 'wifi', 'wine', 'zoo', 'breast', 'stability', 'student', 'leaf', 'kidney', 'traffic']
+
+examples = []
+attributes = []
+discrete_ratio = []
+mean_entropy = []
+mean_correlation = []
+mean_skew = []
+mean_kurtosis = []
+
+for d in db:
+    meta = pd.read_csv('./metadata/' + d + '.csv')
+    del meta['Unnamed: 0']
+    examples.append(meta['examples'][0])
+    attributes.append(meta['attributes'][0])
+    discrete_ratio.append(meta['discrete_ratio'][0])
+    mean_entropy.append(meta['mean_entropy'][0])
+    mean_correlation.append(meta['mean_correlation'][0])
+    mean_skew.append(meta['mean_skew'][0])
+    mean_kurtosis.append(meta['mean_kurtosis'][0])
+
 table = {
-    'db': ['abalone', 'adult', 'australian', 'drugs', 'fertility', 'german', 'glass', 'heart', 'ionosphere', 'pendigits', 'phishing', 'failures', 'shuttle', 'spam', 'wdbc', 'wifi', 'wine', 'zoo', 'breast', 'stability', 'student', 'leaf', 'kidney', 'traffic'],
+    'db': db,
+    'examples': examples,
+    'attributes': attributes,
+    'discrete_ratio': discrete_ratio,
+    'mean_entropy': mean_entropy,
+    'mean_correlation': mean_correlation,
+    'mean_skew': mean_skew,
+    'mean_kurtosis': mean_kurtosis,
     'cart_accuracy': cart_accuracy,
     'naive_accuracy': naive_accuracy,
     'neural_accuracy': neural_accuracy
 }
 
-columns = ['db', 'cart_accuracy', 'naive_accuracy', 'neural_accuracy']
+columns = ['db', 'examples', 'attributes', 'discrete_ratio', 'mean_entropy', 'mean_correlation', 'mean_skew', 'mean_kurtosis', 'cart_accuracy', 'naive_accuracy', 'neural_accuracy']
 
 df = pd.DataFrame(table, columns=columns)
 
