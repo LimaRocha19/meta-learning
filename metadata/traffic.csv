@@ -1,2 +1,2 @@
-,examples,attributes,discrete_ratio,mean_entropy,mean_correlation,mean_skew,mean_kurtosis
-0,135,18,1.0,3.025389416013526,,,
+,examples,attributes,discrete_ratio,mean_entropy,mean_correlation,mean_skew,mean_kurtosis,outliers,classes
+0,135,18,1.0,3.025389416013526,,,,0,5
