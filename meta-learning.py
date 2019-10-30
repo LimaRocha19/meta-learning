@@ -30,6 +30,7 @@ mean_skew = []
 mean_kurtosis = []
 outliers = []
 classes = []
+entropy = []
 
 for d in db:
     meta = pd.read_csv('./metadata/' + d + '.csv')
@@ -43,6 +44,7 @@ for d in db:
     mean_kurtosis.append(meta['mean_kurtosis'][0])
     outliers.append(meta['outliers'][0])
     classes.append(meta['classes'][0])
+    entropy.append(meta['entropy'][0])
 
 table = {
     'db': db,
@@ -55,12 +57,13 @@ table = {
     'mean_kurtosis': mean_kurtosis,
     'outliers': outliers,
     'classes': classes,
+    'entropy': entropy,
     'cart_accuracy': cart_accuracy,
     'naive_accuracy': naive_accuracy,
     'neural_accuracy': neural_accuracy
 }
 
-columns = ['db', 'examples', 'attributes', 'discrete_ratio', 'mean_entropy', 'mean_correlation', 'mean_skew', 'mean_kurtosis', 'outliers', 'classes', 'cart_accuracy', 'naive_accuracy', 'neural_accuracy']
+columns = ['db', 'examples', 'attributes', 'discrete_ratio', 'mean_entropy', 'mean_correlation', 'mean_skew', 'mean_kurtosis', 'outliers', 'classes', 'entropy', 'cart_accuracy', 'naive_accuracy', 'neural_accuracy']
 
 df = pd.DataFrame(table, columns=columns)
 

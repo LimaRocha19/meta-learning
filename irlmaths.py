@@ -31,6 +31,7 @@ def metadata(df, path, target):
     df_discrete_ratio = len(df.select_dtypes(include=['int64']).columns) / df_attributes
 
     df_classes = len(df[target].value_counts())
+    df_entropy = stats.entropy(df[target], base=2)
 
     entropies = []
 
@@ -59,10 +60,11 @@ def metadata(df, path, target):
         'mean_skew': df_mean_skew,
         'mean_kurtosis': df_mean_kurtosis,
         'outliers': df_outliers,
-        'classes': df_classes
+        'classes': df_classes,
+        'entropy': df_entropy
     }
 
-    columns = ['examples', 'attributes', 'discrete_ratio', 'mean_entropy', 'mean_correlation', 'mean_skew', 'mean_kurtosis', 'outliers', 'classes']
+    columns = ['examples', 'attributes', 'discrete_ratio', 'mean_entropy', 'mean_correlation', 'mean_skew', 'mean_kurtosis', 'outliers', 'classes', 'entropy']
 
     meta_df = pd.DataFrame(table, columns=columns, index=[0])
 
