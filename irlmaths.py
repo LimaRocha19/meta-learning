@@ -26,9 +26,9 @@ def outliers(df):
 
 def metadata(df, path, target):
 
-    df_examples = df.count()[0]
-    df_attributes = len(df.columns)
-    df_discrete_ratio = len(df.select_dtypes(include=['int64']).columns) / df_attributes
+    df_examples = np.log2(df.count()[0])
+    df_attributes = np.log2(len(df.columns))
+    df_discrete_ratio = len(df.select_dtypes(include=['int64']).columns) / len(df.columns)
 
     df_classes = len(df[target].value_counts())
     df_entropy = stats.entropy(df[target], base=2)

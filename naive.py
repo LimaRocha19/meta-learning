@@ -11,7 +11,8 @@ from sklearn import metrics
 def naive(csv_path, target):
 
     df = pd.read_csv(csv_path)
-    del df['Unnamed: 0'] # a small workaround regarding csv exporting issues
+    if 'Unnamed: 0' in df.columns:
+        del df['Unnamed: 0'] # a small workaround regarding csv exporting issues
 
     y = df[target]
     del df[target]
