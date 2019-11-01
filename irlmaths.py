@@ -33,6 +33,8 @@ def metadata(df, path, target):
     df_classes = len(df[target].value_counts())
     df_entropy = stats.entropy(df[target], base=2)
 
+    df_outliers = outliers(df) / df.count()[0]
+
     entropies = []
 
     for column in df.select_dtypes(include=['int64']).columns:
@@ -48,8 +50,6 @@ def metadata(df, path, target):
     df_mean_skew = df.skew().mean()
 
     df_mean_kurtosis = df.kurtosis().mean()
-
-    df_outliers = outliers(df)
 
     table = {
         'examples': df_examples,

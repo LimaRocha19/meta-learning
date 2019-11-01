@@ -3,10 +3,24 @@ import numpy as np
 import matplotlib.pyplot as plt
 import math
 
-from irlmaths import outliers
+# from irlmaths import outliers
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
 from scipy import stats
+
+def outliers(df):
+
+    outliers = 0
+    threshold = 3
+
+    for index, row in df.iterrows():
+        for column in df.columns:
+            z = (row[column] - df[column].mean()) / df[column].std()
+            if np.abs(z) > threshold:
+                outliers = outliers + 1
+                break
+
+    return outliers
 
 def knn(df, target):
 
@@ -21,6 +35,8 @@ def knn(df, target):
 
     df_classes = len(df[target].value_counts())
     df_entropy = stats.entropy(df[target], base=2)
+
+    df_outliers = outliers(df) / df.count()[0]
 
     entropies = []
 
@@ -37,8 +53,6 @@ def knn(df, target):
     df_mean_skew = df.skew().mean()
 
     df_mean_kurtosis = df.kurtosis().mean()
-
-    df_outliers = outliers(df)
 
     table = {
         'examples': df_examples,
@@ -203,23 +217,23 @@ print('---------------------------------------------------')
 
 # database poker - perfect
 
-# poker = pd.read_csv('./test/poker.csv')
-#
-# print('database poker recomendation: ', knn(poker, 'class'))
-# print('cart_accuracy', cart('./test/poker.csv', 'class'))
-# print('naive_accuracy', naive('./test/poker.csv', 'class'))
-# print('neural_accuracy', neural('./test/poker.csv', 'class'))
-# print('---------------------------------------------------')
+poker = pd.read_csv('./test/poker.csv')
+
+print('database poker recomendation: ', knn(poker, 'class'))
+print('cart_accuracy', cart('./test/poker.csv', 'class'))
+print('naive_accuracy', naive('./test/poker.csv', 'class'))
+print('neural_accuracy', neural('./test/poker.csv', 'class'))
+print('---------------------------------------------------')
 
 # database agaricus - needs transformation
 
-# agaricus = pd.read_csv('./test/agaricus-lepiota.csv')
-#
-# print('database agaricus recomendation: ', knn(agaricus, 'class'))
-# print('cart_accuracy', cart('./test/agaricus-lepiota.csv', 'class'))
-# print('naive_accuracy', naive('./test/agaricus-lepiota.csv', 'class'))
-# print('neural_accuracy', neural('./test/agaricus-lepiota.csv', 'class'))
-# print('---------------------------------------------------')
+agaricus = pd.read_csv('./test/agaricus-lepiota.csv')
+
+print('database agaricus recomendation: ', knn(agaricus, 'class'))
+print('cart_accuracy', cart('./test/agaricus-lepiota.csv', 'class'))
+print('naive_accuracy', naive('./test/agaricus-lepiota.csv', 'class'))
+print('neural_accuracy', neural('./test/agaricus-lepiota.csv', 'class'))
+print('---------------------------------------------------')
 
 # database car - needs transformation
 
@@ -233,20 +247,20 @@ print('---------------------------------------------------')
 
 # database lung - perfect
 
-# lung = pd.read_csv('./test/lung-cancer.csv')
-#
-# print('database lung recomendation: ', knn(lung, 'A1'))
-# print('cart_accuracy', cart('./test/lung-cancer.csv', 'A1'))
-# print('naive_accuracy', naive('./test/lung-cancer.csv', 'A1'))
-# print('neural_accuracy', neural('./test/lung-cancer.csv', 'A1'))
-# print('---------------------------------------------------')
+lung = pd.read_csv('./test/lung-cancer.csv')
+
+print('database lung recomendation: ', knn(lung, 'A1'))
+print('cart_accuracy', cart('./test/lung-cancer.csv', 'A1'))
+print('naive_accuracy', naive('./test/lung-cancer.csv', 'A1'))
+print('neural_accuracy', neural('./test/lung-cancer.csv', 'A1'))
+print('---------------------------------------------------')
 
 # database vehicle - nneds transformation
 
-# vehicle = pd.read_csv('./test/vehicle.csv')
-#
-# print('database vehicle recomendation: ', knn(vehicle, 'A19'))
-# print('cart_accuracy', cart('./test/vehicle.csv', 'A19'))
-# print('naive_accuracy', naive('./test/vehicle.csv', 'A19'))
-# print('neural_accuracy', neural('./test/vehicle.csv', 'A19'))
-# print('---------------------------------------------------')
+vehicle = pd.read_csv('./test/vehicle.csv')
+
+print('database vehicle recomendation: ', knn(vehicle, 'A19'))
+print('cart_accuracy', cart('./test/vehicle.csv', 'A19'))
+print('naive_accuracy', naive('./test/vehicle.csv', 'A19'))
+print('neural_accuracy', neural('./test/vehicle.csv', 'A19'))
+print('---------------------------------------------------')
