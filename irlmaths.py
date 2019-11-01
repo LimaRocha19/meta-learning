@@ -38,7 +38,8 @@ def metadata(df, path, target):
     entropies = []
 
     for column in df.select_dtypes(include=['int64']).columns:
-        entropies.append(stats.entropy(df[column], base=2))
+        if not(np.isnan(stats.entropy(df[column], base=2))):
+            entropies.append(stats.entropy(df[column], base=2))
 
     df_mean_entropy = np.mean(entropies)
 
