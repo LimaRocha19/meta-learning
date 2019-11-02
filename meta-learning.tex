@@ -1,0 +1,303 @@
+% This is samplepaper.tex, a sample chapter demonstrating the
+% LLNCS macro package for Springer Computer Science proceedings;
+% Version 2.20 of 2017/10/04
+
+\documentclass[runningheads]{llncs}
+
+\usepackage{adjustbox}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage[portuguese]{babel}
+
+% \renewcommand\UrlFont{\color{blue}\rmfamily}
+
+\begin{document}
+
+\title{Desenvolvimento de Sistema de Meta-Aprendizagem para Problemas de Classificação\thanks{Apoio: Universidade Presbiteriana Mackenzie.}}
+
+\titlerunning{Meta-Aprendizagem para Classificação}
+
+\author{Isaías Lima}
+
+\authorrunning{Isaías Lima}
+
+\institute{Universidade Presbiteriana Mackenzie, Rua da Consolação, 930, São Paulo, Brasil
+\email{isaiahlima18@gmail.com}}
+
+\maketitle
+
+\begin{abstract}
+A meta-aprendizagem tem por objetivo selecionar ou classificar os algoritmos mais adequados para a solução de um problema tendo como base a proximidade deste com outros problemas previamente conhecidos, diminuindo e otimizando tempo e recursos necessários para uma tarefa desta natureza. Esta proximidade entre problemas é pesquisada com base em meta-conhecimentos, que são informações diversas que podem ser extraídas a partir deles. O presente trabalho descreve a implementação e o desempenho de um sistema de meta-aprendizagem aplicado a problemas de classificação, ao mesmo tempo que analisa o desempenho do algoritmo k-NN como meta-regressor. Os resultados demonstraram que a acurácia do sistema tem correlação direta com a quantidade de vizinhos escolhida pelo algoritmo.
+
+\keywords{Meta-Aprendizagem  \and Classificação \and Seleção de Algoritmos.}
+\end{abstract}
+
+\section{Introdução}
+
+Embora a performance de um algoritmo sobre um determinado problema tenha forte dependência de sua implementação e de seu treinamento, outro ponto de influência sobre este que também pode ser observado são as características deste problema. Esta proposta foi levantada por Rice \cite{rice}, originando assim o Problema de Seleção de Algoritmos. A partir desta consideração, alguns trabalhos foram realizados visando compreender esta relação entre o desempenho de um algoritmo e as características do problema sendo processado por ele.
+
+O projeto StatLog \cite{statlog} teve por objetivo comparar três grupos de algoritmos de classificação em problemas reais, a saber: simbólicos, estatísticos e redes neurais. A partir das bases de dados analisadas, ao todo 12, algumas características foram extraídas, para consolidação deste comparativo, tais como: a quantidade de objetos, a quantidade de atributos, a quantidade de atributos categóricos, a quantidade de classes, a homogeneidade da covariância, o coeficiente absoluto de correlação médio, a correlação discriminante canônica, a variação explicada pelos primeiros quatro discriminantes canônicos, a inclinação média e a curtose média. A medição de performance foi realizada por meio da acurácia, das matrizes de confusão e custo e dos tempos de treinamento e teste. Entre outras conclusões, foi observado que, por exemplo, algoritmos simbólicos, tais como árvores de decisão, apresentaram melhor performance no processamento de bases com distribuiçõs extremas, ou seja, altos valores de inclinação e de curtose. O projeto METAL \cite{cross} realizou um trabalho semelhante, analisando 53 bases de dados e aplicando validação cruzada 10-pastas. Além da acurácia, o tempo de processamento também foi considerado como medida de performance.
+
+A observação da influência destas características de um problema sobre os algoritmos aplicados sobre ele estabeleceu o conceito de meta-aprendizagem. Este campo tem por objetivo aprender como estes dados extraídos a partir de um problema podem contribuir para uma melhor performance \cite{clustering}. Este meta-conhecimento é composto por meta-atributos, que são as características extraídas a partir dos problemas, e por meta-alvos, que são as variáveis que compõem as medidas de performance dos algoritmos. Sendo assim, o meta-conhecimento, também conhecido como metadados, permite estimar, a partir dos meta-atributos, qual seria a performance de um algoritmo. Além de problemas relativos à aprendizagem supervisionada, outros campos já foram abordados por meio de sistemas de meta-aprendizagem, tais como agrupamento \cite{clustering} e remoção de ruídos \cite{noise}, o que, conforme \cite{cross}, demonstra que este conceito possui possibilidades de aplicação em diferentes campos da computação.
+
+A classificação de dados consiste em, a partir de objetos anteriormente rotulados, novos objetos possam ser rotulados da mesma maneira \cite{kdd}. Considerando a quantidade elevada de soluções disponíveis no campo da aprendizagem supervisionada, a aplicação de um sistema de meta-aprendizagem tem o potencial de contribuir para uma melhor performance desta tarefa, uma vez que pode indicar, dentre um grupo pré-selecionado de algoritmos, qual deles atua da melhor maneira para o problema apresentado.
+
+Kalousis, em \cite{kalousis}, apresentou uma metodologia para a seleção de algoritmos considerando-se a aplicação de um sistema de meta-aprendizagem. Uma das ênfases do trabalho foi a seleção de meta-características das bases que descrevessem a relação entre atributos. Após a apresentação de uma arquitetura para o sistema, diferentes grupos de meta-atributos tiveram sua performance preditiva comparada e quatro algoritmos diferentes foram apresentados ao modelo para elaboração de um \emph{ranking} a partir dos problemas apresentados. Brazdil e Gama, em \cite{characterization}, avaliaram diferentes tipos de algoritmos de classificação e diferentes técnicas de pré-processamento. Foi observado certo impacto na performance dos algoritmos em função da maneira como as bases foram pré-processadas. Ferrari e De Castro, em \cite{estimation} e em \cite{recommendation}, abordaram a base de meta-conhecimento tanto como um problema de aprendizagem supervisionada, classificando o melhor algoritmo para solução de novos problemas apresentados, quanto como um problema de regressão, estimando a performance dos algoritmos. Vilalta et al., em \cite{support}, idealizaram uma possível arquitetura para sistemas de meta-aprendizagem a partir do levantamento de trabalhos anteriores; ao mesmo tempo, discutiram as técnicas apresentadas por estes trabalhos que contribuíram para definição da arquitetura, tais como a caracterização das bases de dados.
+
+Tendo como referência estes trabalhos, este trabalho tem por objetivo apresentar a implementação de um sistema de meta-aprendizagem para tarefas de classificação, avaliando três diferentes algoritmos: árvore de decisão, naïve-bayes e perceptron multicamadas. Estes algoritmos tiveram sua performance mensurada a partir da acurácia sobre 23 bases de dados, utilizada junto às meta-características extraídas para estabelecer a base de meta-conhecimento. A indicação do algoritmo mais adequado para novos problemas entre os três avaliados foi realizada por meio do algoritmo k-NN.
+
+\section{Sistema de Meta-Aprendizagem}
+
+O processo de implementação do sistema de meta-aprendizagem para algoritmos de classificação contemplou as técnicas apontadas por \cite{kalousis} e \cite{support} na elaboração da arquitetura e as técnicas apontadas por \cite{kdd} na seleção de algoritmos de aprendizagem e de pré-processamento. As bases utilizadas foram obtidas do \emph{UCI Machine Learning Repository} \cite{uci}, tendo naturezas e domínios distintos, bem como aplicações e objetivos. O sistema foi implementado com o auxílio da linguagem \emph{Python} \cite{python}, tendo como principal base as bibliotecas \emph{Pandas} \cite{pandas} e \emph{Scikit Learn} \cite{sklearn}. O código fonte completo encontra-se disponível em \cite{github}.
+
+\begin{itemize}
+\item \emph{Abalone}
+\item \emph{Adult}
+\item \emph{Australian}
+\item \emph{Drugs}
+\item \emph{Fertility}
+\item \emph{German}
+\item \emph{Glass}
+\item \emph{Heart}
+\item \emph{Ionosphere}
+\item \emph{Pendigits}
+\item \emph{Phishing}
+\item \emph{Failures}
+\item \emph{Shuttle}
+\item \emph{Spam}
+\item \emph{Wdbc}
+\item \emph{Wifi}
+\item \emph{Wine}
+\item \emph{Zoo}
+\item \emph{Breast}
+\item \emph{Stability}
+\item \emph{Student}
+\item \emph{Leaf}
+\item \emph{Kidney}
+\item \emph{Traffic}
+\end{itemize}
+
+\subsection{Pré-Processamento}
+
+As bases foram tratadas antes de serem submetidas aos algoritmos avaliados. Valores ausentes foram substituídos pela média, no caso de atributos contínuos, ou pela moda, no caso de atributos discretos. Atributos categóricos não-numéricos foram transformados em valores numéricos, incluindo casos nos quais os atributos haviam sido normalizados em intervalos menores; desta forma, atributos categóricos tiveram suas classes substituídas por números inteiros, definidos conforme ordem alfabética. Atributos contendo identificadores únicos ou nomenclaturas foram removidos.
+
+\subsection{Caracterização}
+
+As meta-características foram definidas a partir das técnicas apresentas por \cite{statlog} e \cite{survey}, nas quais a extração direta de meta-características a partir de bases de dados é divida em três tipos:
+
+\begin{itemize}
+    \item Dados Simples: variáveis como quantidade de objetos, atributos, classes, entre outras.
+    \item Dados Estatísticos: medidas como médias de correlação, quantidade de \emph{outliers}, inclinação, curtose, entre outras.
+    \item Dados Informacionais: medidas como entropia média, entropia de classe, entre outras.
+\end{itemize}
+
+Um outro tipo de caracterização, denominada indireta, baseia-se na acurácia de algoritmos simples aplicados ao problema, sendo apresentada em \cite{landmarking}. Esta técnica é chamada de \emph{landmarking}.
+
+As meta-características definidas podem ser vistas abaixo. Atributos foram considerados discretos caso possuíssem apenas valores inteiros e contínuos caso contrário (sabendo que, no pré-processamento, todos os atributos foram transformados em numéricos).
+
+\begin{table}[ht]
+\centering
+\caption{Meta-Características.}\label{attributes}
+\begin{tabular}{|l|l|}
+\hline
+Meta-Característica & Descrição \\
+\hline
+\emph{examples} & ${log_2}$ Quantidade de objetos na base \\
+\emph{attributes} & ${log_2}$ Quantidade de atributos na base \\
+\emph{discrete-ratio} & Razão de atributos discretos \\
+\emph{mean-entropy} & Entropia média dos atributos discretos \\
+\emph{mean-correlation} & Correlação média de \emph{Pearson} dos atributos contínuos \\
+\emph{mean-skew} & Inclinação média dos atributos contínuos \\
+\emph{mean-kurtosis} & Curtose média dos atributos contínuos \\
+\emph{outliers} & Percentual de objetos que contém outliers \\
+\emph{classes} & Quantidade de rótulos dos atributos-alvo \\
+\emph{entropy} & Entropia dos atributos-alvo \\
+\hline
+\end{tabular}
+\end{table}
+
+Os \emph{outliers} foram definidos por meio do cálculo do \emph{score-z} do objeto em relação aos seus atributos, conforme \cite{kdd}. Valores maiores do que \textbf{três} foram considerados \emph{outliers}.
+
+\begin{equation}
+    z = \frac{(x - \mu)}{\sigma}
+\end{equation}
+
+A variável ${x}$ representa o valor atual do atributo para o objeto. As variáveis ${\mu}$ e ${\sigma}$ representam, respectivamente, a média e o desvio padrão do atributo. Desta forma, o \emph{score-z} representa a quantidade de desvios-padrão entre uma amostra e sua média.
+
+\subsection{Classificação}
+
+Os algoritmos aplicados para implementação do sistema de meta-aprendizagem contemplaram três grupos distintos: simbólicos (árvore de decisão), estatísticos (naïve-bayes) e redes neurais (perceptron multicamadas). Uma árvore de decisão é um algoritmo determinístico cuja topologia assemelha-se a uma árvore: enquanto os nós dos galhos representam decisões entre possíveis valores dos atributos da base, as folhas representam a classe indicada para o objeto após as escolhas tomadas nos nós de decisão \cite{kdd}. O algoritmo de naïve-bayes baseia-se no Teorema de Bayes para determinar a probabilidade de uma classe ocorrer \cite{kdd}. Já um perceptron multicamadas é uma rede composta por neurônios interligados por sinapses com pesos, cujo aprendizado está atrelado aos valores destes pesos e das funções de ativação de cada perceptron por meio da técnica de retropropagação \cite{kdd}. A avaliação da base de meta-conhecimento para indicação do algoritmo mais adequado para novas bases foi realizada com o algoritmo k-NN. Esta técnica, aplicável tanto em problemas de classificação quanto de regressão, busca por objetos semelhantes ao apresentado e, a partir deles, estima o valor desejado \cite{kdd}.
+
+\subsection{Performance}
+
+A medida de performance adotada para o sistema foi a acurácia dos algoritmos, medida a partir da comparação entre o valor predito e real dos conjuntos de test submetidos aos algoritmos. A seleção entre conjuntos de teste e de treinamento foi realizada de maneira aletória, nas razões de ${30\%}$ e ${70\%}$.
+
+\subsection{Arquitetura}
+
+A arquitetura implementada foi a mesma apontada por \cite{kalousis}. Sua descrição gráfica pode ser vista na Figura \ref{arch}.
+
+\begin{figure}[ht]
+\includegraphics[width=\textwidth]{architecture.PNG}
+\caption{Arquitetura implementada.} \label{arch}
+\end{figure}
+
+\subsection{Meta-Regressor e Avaliação}
+
+O algoritmo utilizado para a recomendação do algoritmo mais adequado para novos problemas foi o k-NN considerando distâncias euclidianas, devido à sua melhor performance em bases de meta-conhecimento, indicada por Ferrari e De Castro em \cite{clustering}. A avaliação do sistema de meta-aprendizagem foi realizada mediante o processamento de sete novas bases de dados obtidas do \emph{UCI Machine Learning Repository} \cite{uci}, processadas de maneira igual às bases utilizadas na implementação, comparando-se a performance do algoritmo recomendado com o algoritmo que melhor atuou sobre elas.
+
+\begin{itemize}
+\item \emph{Lung-Cancer}
+\item \emph{Poker}
+\item \emph{Vehicle}
+\item \emph{Car}
+\item \emph{Iris}
+\item \emph{Messidor}
+\item \emph{Agaricus}
+\end{itemize}
+
+\section{Análise Experimental}
+
+Após a implementação do sistema de meta-aprendizagem, este foi testado com as bases de dados selecionadas e já pré-processadas.
+
+\subsection{Consolidação da Base de Meta-Conhecimento}
+
+Os meta-atributos definidos na Tabela \ref{attributes} foram obtidos a partir das bases de dados. Ao mesmo tempo, os algoritmos foram executados para cada uma das bases, com sua acurácia sendo medida. Estes dois conjuntos, das meta características e dos meta-alvos, foram unidos na consolidação da base de meta-conhecimento. Ressalta-se que, para bases cujos atributos eram exclusivamente discretos, grandezas estatísticas não foram calculadas.
+
+\begin{table}[ht]
+\centering
+\caption{Meta-Conhecimento.}\label{knowledge}
+\begin{adjustbox}{width=1\textwidth}
+\small
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|l|l|l|}
+\hline
+db         & examples & attributes & discrete\_ratio & mean\_entropy & mean\_correlation & mean\_skew & mean\_kurtosis & outliers & classes & entropy & cart\_accuracy & naive\_accuracy & neural\_accuracy \\
+\hline
+abalone    & 12,0283  & 3,1699     & 0,2222          & 11,6232       & 0,9069            & 0,6204     & 11,0332        & 0,0359   & 3,0000  & 11,2900 & 0,4833         & 0,5239          & 0,5478           \\
+adult      & 14,9909  & 3,9069     & 1,0000          & 13,4576       &                   &            &                & 0,1894   & 2,0000  & 12,9368 & 0,8186         & 0,8021          & 0,7976           \\
+australian & 9,4305   & 3,9069     & 0,8000          & 8,5030        & 0,5318            & 1,8454     & 4,8888         & 0,1594   & 2,0000  & 8,2621  & 0,8019         & 0,7923          & 0,6087           \\
+drugs      & 10,8803  & 4,9542     & 1,0000          & 9,5299        &                   &            &                & 0,2324   & 7,0000  & 9,7702  & 0,3039         & 0,1148          & 0,3781           \\
+fertility  & 6,6439   & 3,3219     & 0,9000          & 5,6483        & 1,0000            & 0,7756     & 0,5821         & 0,0200   & 2,0000  & 3,5850  & 0,7333         & 0,7333          & 0,8000           \\
+german     & 9,9658   & 4,6439     & 1,0000          & 9,0118        &                   &            &                & 0,1790   & 2,0000  & 9,8828  & 0,7100         & 0,7367          & 0,7500           \\
+glass      & 7,7415   & 3,3219     & 0,1000          & 7,3794        & 0,3135            & 1,6526     & 9,9085         & 0,0935   & 6,0000  & 7,3794  & 0,6615         & 0,2769          & 0,3538           \\
+heart      & 8,0768   & 3,8074     & 0,9286          & 7,4779        & 1,0000            & 1,2629     & 1,7593         & 0,0333   & 2,0000  & 7,9919  & 0,7160         & 0,8148          & 0,5062           \\
+ionosphere & 8,4553   & 5,0875     & 0,0588          & 7,6336        & 0,2621            & -0,5236    & 0,2337         & 0,0883   & 2,0000  & 6,9773  & 0,8491         & 0,8302          & 0,9245           \\
+pendigits  & 13,4242  & 4,0875     & 1,0000          & 12,9942       &                   &            &                & 0,0218   & 10,0000 & 13,0481 & 0,9557         & 0,8502          & 0,9751           \\
+phishing   & 13,4324  & 4,9542     & 1,0000          & 11,8782       &                   &            &                & 0,0923   & 2,0000  & 12,5880 & 0,9635         & 0,6039          & 0,9394           \\
+failures   & 9,0768   & 4,3219     & 0,1000          & 8,9497        & 0,0643            & 0,0000     & -1,2000        & 0,0852   & 2,0000  & 8,9484  & 0,9259         & 0,9506          & 0,9259           \\
+shuttle    & 13,8238  & 3,3219     & 1,0000          & 13,0089       &                   &            &                & 0,0601   & 7,0000  & 13,5492 & 0,9952         & 0,7260          & 0,9630           \\
+spam       & 12,1677  & 5,8580     & 0,0517          & 10,6158       & 0,0773            & 10,8757    & 220,3676       & 0,5251   & 2,0000  & 10,8242 & 0,9066         & 0,8204          & 0,9341           \\
+wdbc       & 9,1523   & 4,9542     & 0,0323          & 8,4798        & 0,4151            & 1,7404     & 7,8147         & 0,1301   & 2,0000  & 8,4798  & 0,9415         & 0,9474          & 0,8830           \\
+wifi       & 10,9658  & 3,0000     & 1,0000          & 10,9329       &                   &            &                & 0,0350   & 4,0000  & 10,8122 & 0,9667         & 0,9800          & 0,9767           \\
+wine       & 7,4757   & 3,8074     & 0,2143          & 7,3909        & 0,3797            & 0,2442     & -0,1608        & 0,0562   & 3,0000  & 7,3573  & 0,9630         & 0,9815          & 0,3148           \\
+zoo        & 6,6582   & 4,1699     & 1,0000          & 5,3603        &                   &            &                & 0,0792   & 7,0000  & 6,2899  & 0,9032         & 0,9677          & 0,6452           \\
+breast     & 6,7279   & 3,3219     & 0,1000          & 6,2405        & 0,5643            & 2,2860     & 10,2628        & 0,0755   & 6,0000  & 6,2405  & 0,6875         & 0,6250          & 0,3125           \\
+stability  & 13,2877  & 3,8074     & 0,0714          & 11,8218       & 0,1324            & 0,0005     & -1,1155        & 0,0000   & 2,0000  & 11,8218 & 0,9997         & 0,9753          & 0,9523           \\
+student    & 9,3707   & 5,0875     & 1,0000          & 8,5842        &                   &            &                & 0,1435   & 2,0000  & 8,5622  & 0,9950         & 0,8844          & 0,8995           \\
+leaf       & 8,4094   & 4,0000     & 0,1250          & 8,1425        & 0,4090            & 0,6978     & 3,1660         & 0,1618   & 30,0000 & 8,1131  & 0,5882         & 0,7059          & 0,2059           \\
+kidney     & 8,6439   & 4,6439     & 0,5200          & -inf          & 0,3071            & 1,5950     & 34,1540        & 0,2200   & 2,0000  & 7,2288  & 0,9750         & 0,9333          & 0,3833           \\
+traffic    & 7,0768   & 4,1699     & 1,0000          & 3,0254        &                   &            &                & 0,2296   & 5,0000  & 6,4655  & 0,5854         & 0,5122          & 0,6341           \\ \hline
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+\subsection{Meta-Regressor e Sistema de Recomendação}
+
+Os meta-atributos definidos na Tabela \ref{attributes} também foram obtidos para as bases de dados separadas para testes. O algoritmo k-NN foi aplicado, calculando-se a distância euclidiana entre os meta-atributos das bases de teste e os meta-atributos previamente calculados e, assim, estabelecendo um \emph{ranking} das bases de dados mais próximas de cada uma das bases de teste apresentadas. Ou seja, para cada base apresentada, sua distância foi calculada em relação a cada uma das 23 bases utilizadas e esta lista de distâncias foi arranjada em ordem crescente, da base mais próxima para a base mais distante.
+
+A análise experimental avaliou a consideração de diferentes quantidades de vizinhos na regressão da acurácia para cada algoritmo classificador aplicado, que foi estimada pela média das acurácias dos N vizinhos mais próximos. A Figura \ref{acc} demonstra a variação da acurácia do sistema de meta-aprendizagem em função da quantidade considerada de vizinhos.
+
+\begin{figure}[ht]
+\includegraphics[width=\textwidth]{acc_knn.png}
+\caption{Acurácia em Função da Quantidade de Vizinhos.} \label{acc}
+\end{figure}
+
+Foi observado que o uso de \textbf{três} vizinhos apresentou uma melhor acurácia do sistema de recomendação. A matriz de confusão foi calculada para este cenário, e pode ser observada na Tabela \ref{confusion_matrix}.
+
+\begin{table}[ht]
+\centering
+\caption{Matrix de Confusão.}\label{confusion_matrix}
+\begin{tabular}{cc|c|c|c|}
+\cline{3-5}
+                                            &        & \multicolumn{3}{c|}{predicted} \\ \cline{3-5}
+                                            &        & cart    & naive    & neural    \\ \hline
+\multicolumn{1}{|c|}{\multirow{3}{*}{real}} & cart   & 4       & 0        & 0         \\ \cline{2-5}
+\multicolumn{1}{|c|}{}                      & naive  & 1       & 0        & 0         \\ \cline{2-5}
+\multicolumn{1}{|c|}{}                      & neural & 1       & 0        & 1         \\ \hline
+\end{tabular}
+\end{table}
+
+\section{Conclusões}
+
+O problema da classificação tem por objetivo rotular novos objetos a partir de objetos cuja classe já é conhecida. Inúmeras técnicas e melhorias já foram avaliadas e implementadas para esta tarefa, o que envolve custos computacionais em se tratando das fases de treinamento e testes. A partir do momento em que não se conhece qual algoritmo pode ser aplicado, entre tantas soluções existentes, a seleção de uma solução ótima pode implicar mais custos computacionais.
+
+Desta forma, um sistema de meta-aprendizagem apresenta uma alternativa que visa justamente apresentar uma solução ótima reduzindo-se o tempo de processamento necessário no longo prazo, a partir do momento no qual este é aplicado para o treinamento e testes de um meta-regressor e depois é diretamente aplicado ao algoritmo mais eficiente para aquele processo.
+
+O processo analisado demonstrou que, dada a variabilidade inerente entre os objetos de um sistema de meta-aprendizagem, a seleção da quantidade considerada de vizinhos na regressão da performance dos algoritmos tem impacto direto na acurácia do sistema como um todo.
+
+A implementação de um sistema de meta-aprendizagem poderá ser mais eficiente conforme mais bases forem contempladas para construção da base de meta-conhecimento, para que novos problemas aumentem a variabilidade e permitam ao meta-regressor estimar a acurácia dos algoritmos com base em meta-atributos mais próximos dos problemas apresentados.
+
+
+\begin{thebibliography}{8}
+
+\bibitem{clustering}
+Ferrari, D.G., De Castro, L.N.: Clustering algorithm selection by meta-learning systems: A new distance-based problem characterization and ranking combination methods. Information Sciences 301 181-194 (2015). \doi{10.1016/j.ins.2014.12.044}
+
+\bibitem{estimation}
+Ferrari, D.G., De Castro, L.N.: Performance estimation for clustering algorithms with meta-learning techniques. In: 19th Brazilian Conference on Automation, pp. 2380-2386. Campina Grande, São Paulo (2012)
+
+\bibitem{recommendation}
+Ferrari, D.G., De Castro, L.N.: Clustering algorithm recommendation: a meta-learning approach. In: Proceedings of the Third International Conference on Swarm, Evolutionary, and Memetic Computing. Springer-Verlag (2012)
+
+\bibitem{noise}
+Garcia, L.P.F., de Carvalho, A.C.P.L.F., Lorena, A.C.: Noise detection in the meta-learning level. Neurocomputing 176 14-25 (2016). \doi{10.1016/j.neucom.2014.12.100}
+
+\bibitem{statlog}
+King, R.D., Feng, C., Sutherland, A.: StatLog: Comparison of Classification Algorithms on Large Real-World Problems. Applied Artificial Intelligence \textbf{9}(3) 289-333 (1995). \doi{10.1080/08839519508945477}
+
+\bibitem{rice}
+Rice, J.R.: The algorithm selection problem. Advances in Computers 15 (1976)
+
+\bibitem{kalousis}
+Kalousis, A.: Algorithm selection via meta-learning. Université de Genève, Genève (2002). \doi{10.13097/archive-ouverte/unige:104435}
+
+\bibitem{survey}
+Vanschoren, J.: Meta-Learning: A Survey. Eindhoven University of Technology (2018)
+
+\bibitem{approach}
+Bensusan, H., Giraud-Carrier, C., Kennedy, C.J.: A higher-order approach to meta-learning. In: Inductive Logic Programming, 10th International Conference, ILP 2000, Work-in-progress reports. London, UK (2000)
+
+\bibitem{cross}
+Smith-Miles, K.: Cross-Disciplinary Perspectives on Meta-Learning for Algorithm Selection. ACM Computing Surveys \textbf{41}(1) (2008). \doi{10.1145/1456650.1456656}
+
+\bibitem{characterization}
+Gama, J., Brazdil, P.: Characterization of Classification Algorithms. University of Porto (2000)
+
+\bibitem{support}
+Vilalta, R., et al.: Using meta-learning to support data mining. International Journal of Computer Science & Applications \textbf{1}(1) 31-45 (2004)
+
+\bibitem{perspective}
+Vilalta, R., Drissi, Y.: A perspective view and survey of meta-learning. Artificial Intelligence Review 18 77-95 (2002)
+
+\bibitem{landmarking}
+Pfahringer, B., Bensusan, H., Giraud-Carrier, C.: Meta-learning by landmarking various learning algorithms. In: Proceedings of the 17th International Conference on Machine Learning, ICML 2000, pp. 743-750. Morgan Kaufmann (2000)
+
+\bibitem{kdd}
+De Castro, L.N., Ferrari, D.G.: Introdução à mineração de dados: Conceitos básicos, algoritmos e aplicações. 1st edn. Editora Saraiva, São Paulo (2016)
+
+\bibitem{uci}
+UCI Machine Learning Repository, \url{https://archive.ics.uci.edu/ml/index.php}. Acesso em 30 Out 2019
+
+\bibitem{python}
+Python, \url{https://www.python.org/}. Acesso em 30 Out 2019
+
+\bibitem{pandas}
+Pandas, \url{https://pandas.pydata.org/}. Acesso em 30 Out 2019
+
+\bibitem{sklearn}
+Scikit Learn, \url{https://scikit-learn.org/stable/}. Acesso em 30 Out 2019
+
+\bibitem{github}
+LimaRocha19/meta-learning, \url{https://github.com/LimaRocha19/meta-learning.git}. Acesso em 30 Out 2019
+
+\end{thebibliography}
+\end{document}
