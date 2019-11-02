@@ -23,12 +23,14 @@ def outliers(df):
 
     return outliers
 
-def knn(df, target, k=3):
+def knn(df, target):
 
     if 'Unnamed: 0' in df.columns:
         del df['Unnamed: 0'] # a small workaround regarding csv exporting issues
 
     # metadata extraction for the new database
+
+    # print(df.count())
 
     df_examples = np.log2(df.count()[0])
     df_attributes = np.log2(len(df.columns))
@@ -73,7 +75,7 @@ def knn(df, target, k=3):
 
     meta_df = pd.DataFrame(table, columns=columns, index=[0])
 
-    print(meta_df)
+    # print(meta_df)
 
     meta_df = meta_df.fillna(0)
     meta_df = meta_df.replace(np.inf, 100)
@@ -125,6 +127,10 @@ def knn(df, target, k=3):
     })
 
     distances = distances.sort_values(by=['distances'])
+
+    return distances
+
+def recomend(distances, k=3):
 
     cart_acc = []
     naive_acc = []
@@ -222,74 +228,113 @@ def neural(csv_path, target):
 
     return acc
 
-print('---------------------------------------------------')
-
 # database poker - perfect
 
 poker = pd.read_csv('./test/poker.csv')
 
-print('database poker recomendation: ', knn(poker, 'class'))
-print('cart_accuracy', cart('./test/poker.csv', 'class'))
-print('naive_accuracy', naive('./test/poker.csv', 'class'))
-print('neural_accuracy', neural('./test/poker.csv', 'class'))
-print('---------------------------------------------------')
+poker_cart = cart('./test/poker.csv', 'class')
+poker_naive = naive('./test/poker.csv', 'class')
+poker_neural = neural('./test/poker.csv', 'class')
+
+poker_reccomended = 'cart' if (poker_cart > poker_naive and poker_cart > poker_neural) else ('naive' if (poker_naive > poker_cart and poker_naive > poker_neural) else 'neural')
 
 # database agaricus - needs transformation
 
 agaricus = pd.read_csv('./test/agaricus-lepiota.csv')
 
-print('database agaricus recomendation: ', knn(agaricus, 'class'))
-print('cart_accuracy', cart('./test/agaricus-lepiota.csv', 'class'))
-print('naive_accuracy', naive('./test/agaricus-lepiota.csv', 'class'))
-print('neural_accuracy', neural('./test/agaricus-lepiota.csv', 'class'))
-print('---------------------------------------------------')
+agaricus_cart = cart('./test/agaricus-lepiota.csv', 'class')
+agaricus_naive = naive('./test/agaricus-lepiota.csv', 'class')
+agaricus_neural = neural('./test/agaricus-lepiota.csv', 'class')
+
+agaricus_reccomended = 'cart' if (agaricus_cart > agaricus_naive and agaricus_cart > agaricus_neural) else ('naive' if (agaricus_naive > agaricus_cart and agaricus_naive > agaricus_neural) else 'neural')
 
 # database car - needs transformation
 
 car = pd.read_csv('./test/car.csv')
 
-print('database car recomendation: ', knn(car, 'class'))
-print('cart_accuracy', cart('./test/car.csv', 'class'))
-print('naive_accuracy', naive('./test/car.csv', 'class'))
-print('neural_accuracy', neural('./test/car.csv', 'class'))
-print('---------------------------------------------------')
+car_cart = cart('./test/car.csv', 'class')
+car_naive = naive('./test/car.csv', 'class')
+car_neural = neural('./test/car.csv', 'class')
+
+car_reccomended = 'cart' if (car_cart > car_naive and car_cart > car_neural) else ('naive' if (car_naive > car_cart and car_naive > car_neural) else 'neural')
 
 # database lung - perfect
 
 lung = pd.read_csv('./test/lung-cancer.csv')
 
-print('database lung recomendation: ', knn(lung, 'A1'))
-print('cart_accuracy', cart('./test/lung-cancer.csv', 'A1'))
-print('naive_accuracy', naive('./test/lung-cancer.csv', 'A1'))
-print('neural_accuracy', neural('./test/lung-cancer.csv', 'A1'))
-print('---------------------------------------------------')
+lung_cart = cart('./test/lung-cancer.csv', 'A1')
+lung_naive = naive('./test/lung-cancer.csv', 'A1')
+lung_neural = neural('./test/lung-cancer.csv', 'A1')
+
+lung_reccomended = 'cart' if (lung_cart > lung_naive and lung_cart > lung_neural) else ('naive' if (lung_naive > lung_cart and lung_naive > lung_neural) else 'neural')
 
 # database vehicle - needs transformation
 
 vehicle = pd.read_csv('./test/vehicle.csv')
 
-print('database vehicle recomendation: ', knn(vehicle, 'A19'))
-print('cart_accuracy', cart('./test/vehicle.csv', 'A19'))
-print('naive_accuracy', naive('./test/vehicle.csv', 'A19'))
-print('neural_accuracy', neural('./test/vehicle.csv', 'A19'))
-print('---------------------------------------------------')
+vehicle_cart = cart('./test/vehicle.csv', 'A19')
+vehicle_naive = naive('./test/vehicle.csv', 'A19')
+vehicle_neural = neural('./test/vehicle.csv', 'A19')
+
+vehicle_reccomended = 'cart' if (vehicle_cart > vehicle_naive and vehicle_cart > vehicle_neural) else ('naive' if (vehicle_naive > vehicle_cart and vehicle_naive > vehicle_neural) else 'neural')
 
 # database messidor - perfect
 
 messidor = pd.read_csv('./test/messidor_features.csv')
 
-print('database messidor recomendation: ', knn(messidor, 'class'))
-print('cart_accuracy', cart('./test/messidor_features.csv', 'class'))
-print('naive_accuracy', naive('./test/messidor_features.csv', 'class'))
-print('neural_accuracy', neural('./test/messidor_features.csv', 'class'))
-print('---------------------------------------------------')
+messidor_cart = cart('./test/messidor_features.csv', 'class')
+messidor_naive = naive('./test/messidor_features.csv', 'class')
+messidor_neural = neural('./test/messidor_features.csv', 'class')
+
+messidor_reccomended = 'cart' if (messidor_cart > messidor_naive and messidor_cart > messidor_neural) else ('naive' if (messidor_naive > messidor_cart and messidor_naive > messidor_neural) else 'neural')
 
 # database iris - needs transformation
 
 iris = pd.read_csv('./test/iris.csv')
 
-print('database iris recomendation: ', knn(iris, 'class'))
-print('cart_accuracy', cart('./test/iris.csv', 'class'))
-print('naive_accuracy', naive('./test/iris.csv', 'class'))
-print('neural_accuracy', neural('./test/iris.csv', 'class'))
-print('---------------------------------------------------')
+iris_cart = cart('./test/iris.csv', 'class')
+iris_naive = naive('./test/iris.csv', 'class')
+iris_neural = neural('./test/iris.csv', 'class')
+
+iris_reccomended = 'cart' if (iris_cart > iris_naive and iris_cart > iris_neural) else ('naive' if (iris_naive > iris_cart and iris_naive > iris_neural) else 'neural')
+
+# predicting best algorithm
+
+real = [poker_reccomended, agaricus_reccomended, car_reccomended, lung_reccomended, vehicle_reccomended, messidor_reccomended, iris_reccomended]
+
+neighbors = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+accuracies = []
+
+poker_d = knn(poker, 'class')
+agaricus_d = knn(agaricus, 'class')
+car_d = knn(car, 'class')
+lung_d = knn(lung, 'A1')
+vehicle_d = knn(vehicle, 'A19')
+messidor_d = knn(messidor, 'class')
+iris_d = knn(iris, 'class')
+
+for k in neighbors:
+
+    print('!!!!!!!!!!!!!!!!!!!!!!!!! Neighbors:  ')
+    print(k)
+
+    poker_predicted = recomend(poker_d, k)
+    agaricus_predicted = recomend(agaricus_d, k)
+    car_predicted = recomend(car_d, k)
+    lung_predicted = recomend(lung_d, k)
+    vehicle_predicted = recomend(vehicle_d, k)
+    messidor_predicted = recomend(messidor_d, k)
+    iris_predicted = recomend(iris_d, k)
+
+    pred = [poker_predicted, agaricus_predicted, car_predicted, lung_predicted, vehicle_predicted, messidor_predicted, iris_predicted]
+
+    acc = metrics.accuracy_score(real, pred)
+    accuracies.append(acc)
+
+plt.scatter(neighbors, accuracies)
+plt.title('neighbors vs accuracy')
+plt.xlabel('neighbors')
+plt.ylabel('accuracy')
+plt.plot(neighbors, accuracies, '-o')
+plt.grid()
+plt.show()
