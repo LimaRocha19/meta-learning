@@ -83,7 +83,7 @@ As bases foram tratadas antes de serem submetidas aos algoritmos avaliados. Valo
 
 \subsection{Caracterização}
 
-As meta-características foram definidas a partir das técnicas apresentas por \cite{statlog} e \cite{survey}, nas quais a extração direta de meta-características a partir de bases de dados é divida em três tipos:
+As meta-características foram definidas a partir das técnicas apresentas por \cite{statlog} e \cite{survey}, nas quais a extração direta de meta-características a partir de bases de dados é divida em três tipos: 
 
 \begin{itemize}
     \item Dados Simples: variáveis como quantidade de objetos, atributos, classes, entre outras.
@@ -157,7 +157,7 @@ O algoritmo utilizado para a recomendação do algoritmo mais adequado para novo
 
 \section{Análise Experimental}
 
-Após a implementação do sistema de meta-aprendizagem, este foi testado com as bases de dados selecionadas e já pré-processadas.
+Após a implementação do sistema de meta-aprendizagem, este foi testado com as bases de dados selecionadas e já pré-processadas. 
 
 \subsection{Consolidação da Base de Meta-Conhecimento}
 
@@ -202,9 +202,9 @@ traffic    & 7,0768   & 4,1699     & 1,0000          & 3,0254        &          
 
 \subsection{Meta-Regressor e Sistema de Recomendação}
 
-Os meta-atributos definidos na Tabela \ref{attributes} também foram obtidos para as bases de dados separadas para testes. O algoritmo k-NN foi aplicado, calculando-se a distância euclidiana entre os meta-atributos das bases de teste e os meta-atributos previamente calculados e, assim, estabelecendo um \emph{ranking} das bases de dados mais próximas de cada uma das bases de teste apresentadas. Ou seja, para cada base apresentada, sua distância foi calculada em relação a cada uma das 23 bases utilizadas e esta lista de distâncias foi arranjada em ordem crescente, da base mais próxima para a base mais distante.
+Os meta-atributos definidos na Tabela \ref{attributes} também foram obtidos para as bases de dados separadas para testes. O algoritmo k-NN foi aplicado, calculando-se a distância euclidiana entre os meta-atributos das bases de teste e os meta-atributos previamente calculados e, assim, estabelecendo um \emph{ranking} das bases de dados mais próximas de cada uma das bases de teste apresentadas. Ou seja, para cada base apresentada, sua distância foi calculada em relação a cada uma das 23 bases utilizadas e esta lista de distâncias foi arranjada em ordem crescente, da base mais próxima para a base mais distante. 
 
-A análise experimental avaliou a consideração de diferentes quantidades de vizinhos na regressão da acurácia para cada algoritmo classificador aplicado, que foi estimada pela média das acurácias dos N vizinhos mais próximos. A Figura \ref{acc} demonstra a variação da acurácia do sistema de meta-aprendizagem em função da quantidade considerada de vizinhos.
+A análise experimental avaliou a consideração de diferentes quantidades de vizinhos na regressão da acurácia para cada algoritmo classificador aplicado, que foi estimada pela média das acurácias dos N vizinhos mais próximos. A Figura \ref{acc} demonstra a variação da acurácia do sistema de meta-aprendizagem em função da quantidade considerada de vizinhos. 
 
 \begin{figure}[ht]
 \includegraphics[width=\textwidth]{acc_knn.png}
@@ -218,10 +218,10 @@ Foi observado que o uso de \textbf{três} vizinhos apresentou uma melhor acurác
 \caption{Matrix de Confusão.}\label{confusion_matrix}
 \begin{tabular}{cc|c|c|c|}
 \cline{3-5}
-                                            &        & \multicolumn{3}{c|}{predicted} \\ \cline{3-5}
+                                            &        & \multicolumn{3}{c|}{predicted} \\ \cline{3-5} 
                                             &        & cart    & naive    & neural    \\ \hline
-\multicolumn{1}{|c|}{\multirow{3}{*}{real}} & cart   & 4       & 0        & 0         \\ \cline{2-5}
-\multicolumn{1}{|c|}{}                      & naive  & 1       & 0        & 0         \\ \cline{2-5}
+\multicolumn{1}{|c|}{\multirow{3}{*}{real}} & cart   & 4       & 0        & 0         \\ \cline{2-5} 
+\multicolumn{1}{|c|}{}                      & naive  & 1       & 0        & 0         \\ \cline{2-5} 
 \multicolumn{1}{|c|}{}                      & neural & 1       & 0        & 1         \\ \hline
 \end{tabular}
 \end{table}
@@ -239,65 +239,65 @@ A implementação de um sistema de meta-aprendizagem poderá ser mais eficiente 
 
 \begin{thebibliography}{8}
 
+\bibitem{approach}
+Bensusan, H., Giraud-Carrier, C., Kennedy, C.J.: A higher-order approach to meta-learning. In: Inductive Logic Programming, 10th International Conference, ILP 2000, Work-in-progress reports. London, UK (2000)
+
+\bibitem{kdd}
+De Castro, L.N., Ferrari, D.G.: Introdução à mineração de dados: Conceitos básicos, algoritmos e aplicações. 1st edn. Editora Saraiva, São Paulo (2016)
+
+\bibitem{recommendation}
+Ferrari, D.G., De Castro, L.N.: Clustering algorithm recommendation: a meta-learning approach. In: Proceedings of the Third International Conference on Swarm, Evolutionary, and Memetic Computing. Springer-Verlag (2012)
+
 \bibitem{clustering}
 Ferrari, D.G., De Castro, L.N.: Clustering algorithm selection by meta-learning systems: A new distance-based problem characterization and ranking combination methods. Information Sciences 301 181-194 (2015). \doi{10.1016/j.ins.2014.12.044}
 
 \bibitem{estimation}
 Ferrari, D.G., De Castro, L.N.: Performance estimation for clustering algorithms with meta-learning techniques. In: 19th Brazilian Conference on Automation, pp. 2380-2386. Campina Grande, São Paulo (2012)
 
-\bibitem{recommendation}
-Ferrari, D.G., De Castro, L.N.: Clustering algorithm recommendation: a meta-learning approach. In: Proceedings of the Third International Conference on Swarm, Evolutionary, and Memetic Computing. Springer-Verlag (2012)
+\bibitem{characterization}
+Gama, J., Brazdil, P.: Characterization of Classification Algorithms. University of Porto (2000)
 
 \bibitem{noise}
 Garcia, L.P.F., de Carvalho, A.C.P.L.F., Lorena, A.C.: Noise detection in the meta-learning level. Neurocomputing 176 14-25 (2016). \doi{10.1016/j.neucom.2014.12.100}
 
-\bibitem{statlog}
-King, R.D., Feng, C., Sutherland, A.: StatLog: Comparison of Classification Algorithms on Large Real-World Problems. Applied Artificial Intelligence \textbf{9}(3) 289-333 (1995). \doi{10.1080/08839519508945477}
-
-\bibitem{rice}
-Rice, J.R.: The algorithm selection problem. Advances in Computers 15 (1976)
-
 \bibitem{kalousis}
 Kalousis, A.: Algorithm selection via meta-learning. Université de Genève, Genève (2002). \doi{10.13097/archive-ouverte/unige:104435}
 
-\bibitem{survey}
-Vanschoren, J.: Meta-Learning: A Survey. Eindhoven University of Technology (2018)
+\bibitem{statlog}
+King, R.D., Feng, C., Sutherland, A.: StatLog: Comparison of Classification Algorithms on Large Real-World Problems. Applied Artificial Intelligence \textbf{9}(3) 289-333 (1995). \doi{10.1080/08839519508945477}
 
-\bibitem{approach}
-Bensusan, H., Giraud-Carrier, C., Kennedy, C.J.: A higher-order approach to meta-learning. In: Inductive Logic Programming, 10th International Conference, ILP 2000, Work-in-progress reports. London, UK (2000)
-
-\bibitem{cross}
-Smith-Miles, K.: Cross-Disciplinary Perspectives on Meta-Learning for Algorithm Selection. ACM Computing Surveys \textbf{41}(1) (2008). \doi{10.1145/1456650.1456656}
-
-\bibitem{characterization}
-Gama, J., Brazdil, P.: Characterization of Classification Algorithms. University of Porto (2000)
-
-\bibitem{support}
-Vilalta, R., et al.: Using meta-learning to support data mining. International Journal of Computer Science & Applications \textbf{1}(1) 31-45 (2004)
-
-\bibitem{perspective}
-Vilalta, R., Drissi, Y.: A perspective view and survey of meta-learning. Artificial Intelligence Review 18 77-95 (2002)
+\bibitem{github}
+LimaRocha19/meta-learning, \url{https://github.com/LimaRocha19/meta-learning.git}. Acesso em 30 Out 2019
 
 \bibitem{landmarking}
 Pfahringer, B., Bensusan, H., Giraud-Carrier, C.: Meta-learning by landmarking various learning algorithms. In: Proceedings of the 17th International Conference on Machine Learning, ICML 2000, pp. 743-750. Morgan Kaufmann (2000)
 
-\bibitem{kdd}
-De Castro, L.N., Ferrari, D.G.: Introdução à mineração de dados: Conceitos básicos, algoritmos e aplicações. 1st edn. Editora Saraiva, São Paulo (2016)
-
-\bibitem{uci}
-UCI Machine Learning Repository, \url{https://archive.ics.uci.edu/ml/index.php}. Acesso em 30 Out 2019
+\bibitem{pandas}
+Pandas, \url{https://pandas.pydata.org/}. Acesso em 30 Out 2019
 
 \bibitem{python}
 Python, \url{https://www.python.org/}. Acesso em 30 Out 2019
 
-\bibitem{pandas}
-Pandas, \url{https://pandas.pydata.org/}. Acesso em 30 Out 2019
+\bibitem{rice}
+Rice, J.R.: The algorithm selection problem. Advances in Computers 15 (1976)
 
 \bibitem{sklearn}
 Scikit Learn, \url{https://scikit-learn.org/stable/}. Acesso em 30 Out 2019
 
-\bibitem{github}
-LimaRocha19/meta-learning, \url{https://github.com/LimaRocha19/meta-learning.git}. Acesso em 30 Out 2019
+\bibitem{cross}
+Smith-Miles, K.: Cross-Disciplinary Perspectives on Meta-Learning for Algorithm Selection. ACM Computing Surveys \textbf{41}(1) (2008). \doi{10.1145/1456650.1456656}
+
+\bibitem{uci}
+UCI Machine Learning Repository, \url{https://archive.ics.uci.edu/ml/index.php}. Acesso em 30 Out 2019
+
+\bibitem{survey}
+Vanschoren, J.: Meta-Learning: A Survey. Eindhoven University of Technology (2018)
+
+\bibitem{perspective}
+Vilalta, R., Drissi, Y.: A perspective view and survey of meta-learning. Artificial Intelligence Review 18 77-95 (2002)
+
+\bibitem{support}
+Vilalta, R., et al.: Using meta-learning to support data mining. International Journal of Computer Science & Applications \textbf{1}(1) 31-45 (2004)
 
 \end{thebibliography}
 \end{document}
